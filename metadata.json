@@ -1,0 +1,16 @@
+{
+  "name": "MusicPlayer",
+  "category": "multimedia",
+  "title": {
+    "en_EN": "Music Player"
+  },
+  "description": {
+    "en_EN": "Music Player"
+  },
+  "mimes": [
+    "^audio\/(.*)"
+  ],
+  "files": [
+    "index.js"
+  ]
+}
