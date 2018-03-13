@@ -126,9 +126,7 @@ OSjs.make('osjs/packages').register('MusicPlayer', (core, args, options, metadat
   proc.createWindow({
     id: 'MusicPlayerWindow',
     title: metadata.title.en_EN,
-    state: {
-      dimension: {width: 400, height: 200}
-    }
+    dimension: {width: 400, height: 200}
   })
     .on('destroy', () => proc.destroy())
     .on('render', (win) => win.focus())
