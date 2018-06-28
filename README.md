@@ -12,5 +12,3 @@
 # OS.js v3 Music Player Package
 
 This is the Music Player Package for OS.js v3
-
-**PLEASE NOTE THAT THIS IS AN ALPHA PRE-RELEASE AND SUBJECT TO CHANGE WITHOUT NOTICE**
