@@ -35,10 +35,9 @@ import {
 
 import {
   Box,
-  BoxContainer,
   Button,
   Toolbar,
-  Input
+  RangeField
 } from '@osjs/gui';
 
 const formatTime = (secs) => {
@@ -50,34 +49,28 @@ const formatTime = (secs) => {
 
 const view = (core, proc, win, audio) =>
   (state, actions) => h(Box, {}, [
-    h(BoxContainer, {grow: 1, shrink: 1}, [
-      h(Box, {align: 'center', justify: 'center'}, [
-        h(BoxContainer, {}, [
-          h('div', {style: {textAlign: 'center', fontWeight: 'bold'}}, `${state.trackTitle}`)
-        ]),
-        h(BoxContainer, {}, [
-          h('div', {style: {textAlign: 'center'}}, `${formatTime(state.currentTime)} / ${formatTime(state.trackLength)}`)
-        ]),
-      ])
+    h(Box, {grow: 1, shrink: 1, align: 'center', justify: 'center', orientation: 'horizontal'}, [
+      h(Box, {}, [
+        h('div', {style: {textAlign: 'center', fontWeight: 'bold'}}, `${state.trackTitle}`)
+      ]),
+      h(Box, {}, [
+        h('div', {style: {textAlign: 'center'}}, `${formatTime(state.currentTime)} / ${formatTime(state.trackLength)}`)
+      ]),
     ]),
-    h(BoxContainer, {grow: 1, align: 'center', justify: 'center', style: {display: 'flex'}}, [
-      h(Input, {
-        type: 'range',
-        value: String(state.currentTime),
-        max: String(state.trackLength),
-        style: {width: '80%'},
-        onchange: (val) => (audio.currentTime = val)
-      })
-    ]),
-    h(BoxContainer, {}, [
-      h(Toolbar, {justify: 'center'}, [
-        h(Button, {label: 'Prev', disabled: true}),
-        h(Button, {label: 'Rew', disabled: true}),
-        h(Button, {label: 'Pause', disabled: !state.playing, onclick: () => audio.pause()}),
-        h(Button, {label: 'Play', disabled: state.playing, onclick: () => audio.play()}),
-        h(Button, {label: 'Fwd', disabled: true}),
-        h(Button, {label: 'Next', disabled: true})
-      ])
+    h(RangeField, {
+      value: String(state.currentTime),
+      max: String(state.trackLength),
+      style: {width: '80%'},
+      box: {align: 'center'},
+      onchange: (ev, val) => (audio.currentTime = val)
+    }),
+    h(Toolbar, {justify: 'center'}, [
+      h(Button, {label: 'Prev', disabled: true}),
+      h(Button, {label: 'Rew', disabled: true}),
+      h(Button, {label: 'Pause', disabled: !state.playing, onclick: () => audio.pause()}),
+      h(Button, {label: 'Play', disabled: state.playing, onclick: () => audio.play()}),
+      h(Button, {label: 'Fwd', disabled: true}),
+      h(Button, {label: 'Next', disabled: true})
     ])
   ]);
 
