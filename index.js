@@ -37,8 +37,12 @@ import {
   Box,
   Button,
   Toolbar,
+  Menubar,
+  MenubarItem,
   RangeField
 } from '@osjs/gui';
+
+import {BasicApplication} from '@osjs/common';
 
 const formatTime = (secs) => {
   const hr  = Math.floor(secs / 3600);
@@ -49,6 +53,11 @@ const formatTime = (secs) => {
 
 const view = (core, proc, win, audio) =>
   (state, actions) => h(Box, {}, [
+    h(Menubar, {}, [
+      h(MenubarItem, {
+        onclick: ev => actions.menu(ev)
+      }, 'File')
+    ]),
     h(Box, {grow: 1, shrink: 1, align: 'center', justify: 'center', orientation: 'horizontal'}, [
       h(Box, {}, [
         h('div', {style: {textAlign: 'center', fontWeight: 'bold'}}, `${state.trackTitle}`)
@@ -61,7 +70,7 @@ const view = (core, proc, win, audio) =>
       value: String(state.currentTime),
       max: String(state.trackLength),
       style: {width: '80%'},
-      box: {align: 'center'},
+      box: {align: 'center', justify: 'center'},
       onchange: (ev, val) => (audio.currentTime = val)
     }),
     h(Toolbar, {justify: 'center'}, [
@@ -74,47 +83,13 @@ const view = (core, proc, win, audio) =>
     ])
   ]);
 
-const actions = (core, proc, win, audio) => {
-  return {
-    setPlaying: playing => state => ({playing}),
-    setTrackLength: trackLength => state => ({trackLength}),
-    setTrackTitle: trackTitle => state => ({trackTitle}),
-    setCurrentTime: currentTime => state => ({currentTime})
-  };
-};
-
-const playFile = (proc, win, audio, {filename, url}) => {
-  audio.pause();
-  audio.currentTime = 0;
-  audio.src = url;
-  audio.play();
-  win.setTitle(`${proc.metadata.title.en_EN} - ${filename}`);
-};
-
-const openFile = async (core, proc, win, a, audio, file) => {
-  const url = await core.make('osjs/vfs').url(file.path);
-  const ref = Object.assign({}, file, {url});
-
-  if (file.mime.match(/^audio/)) {
-    playFile(proc, win, audio, ref);
-  }
-
-  proc.args.file = file;
-};
-
 OSjs.make('osjs/packages').register('MusicPlayer', (core, args, options, metadata) => {
+  const vfs = core.make('osjs/vfs');
   const proc = core.make('osjs/application', {
     args,
     options,
     metadata
   });
-
-  const state = {
-    playing: false,
-    trackTitle: '(no track loaded)',
-    trackLength: 0,
-    currentTime: 0
-  };
 
   proc.createWindow({
     id: 'MusicPlayerWindow',
@@ -125,10 +100,47 @@ OSjs.make('osjs/packages').register('MusicPlayer', (core, args, options, metadat
     .on('render', (win) => win.focus())
     .render(($content, win) => {
       const audio = document.createElement('audio');
-      const a = app(state,
-          actions(core, proc, win, audio),
-          view(core, proc, win, audio),
-          $content);
+
+      const basic = new BasicApplication(core, proc, win, {
+        defaultFilename: null
+      });
+
+      const a = app({
+        playing: false,
+        trackTitle: '(no track loaded)',
+        trackLength: 0,
+        currentTime: 0
+      }, {
+        setPlaying: playing => state => ({playing}),
+        setTrackLength: trackLength => state => ({trackLength}),
+        setTrackTitle: trackTitle => state => ({trackTitle}),
+        setCurrentTime: currentTime => state => ({currentTime}),
+
+        menu: ev => (state, actions) => {
+          core.make('osjs/contextmenu').show({
+            position: ev.target,
+            menu: [
+              {label: 'Open', onclick: () => actions.menuOpen()},
+              {label: 'Quit', onclick: () => actions.menuQuit()}
+            ]
+          })
+        },
+
+        menuOpen: () => () => basic.createOpenDialog(),
+        menuQuit: () => () => proc.destroy(),
+
+        play: url => () => {
+          audio.pause();
+          audio.currentTime = 0;
+          audio.src = url;
+          audio.play();
+        },
+
+        load: file => (state, actions) => {
+          vfs.url(file.path)
+            .then(url => actions.play(url));
+        }
+      }, view(core, proc, win, audio), $content);
 
       audio.addEventListener('ended', () => a.setPlaying(false));
       audio.addEventListener('play', () => a.setPlaying(true));
@@ -138,11 +150,18 @@ OSjs.make('osjs/packages').register('MusicPlayer', (core, args, options, metadat
         a.setTrackLength(ev.target.duration);
         a.setTrackTitle(proc.args.file.filename);
       });
+
       audio.addEventListener('error', () => a.setPlaying(false));
 
-      if (args.file) {
-        openFile(core, proc, win, a, audio, args.file);
-      }
+      proc.on('destroy', () => basic.destroy());
+      proc.on('destroy', () => {
+        if (audio) {
+          audio.pause();
+        }
+        audio.remove();
+      });
+      basic.on('open-file', a.load);
+      basic.init();
     })
 
   return proc;
