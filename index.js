@@ -137,7 +137,7 @@ OSjs.make('osjs/packages').register('MusicPlayer', (core, args, options, metadat
         },
 
         load: file => (state, actions) => {
-          vfs.url(file.path)
+          vfs.url(file)
             .then(url => actions.play(url));
         }
       }, view(core, proc, win, audio), $content);
