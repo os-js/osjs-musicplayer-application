@@ -1,6 +1,7 @@
 {
   "name": "MusicPlayer",
   "category": "multimedia",
+  "icon": "icon.png",
   "title": {
     "en_EN": "Music Player"
   },

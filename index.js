@@ -94,6 +94,7 @@ OSjs.make('osjs/packages').register('MusicPlayer', (core, args, options, metadat
   proc.createWindow({
     id: 'MusicPlayerWindow',
     title: metadata.title.en_EN,
+    icon: proc.resource(metadata.icon),
     dimension: {width: 400, height: 200}
   })
     .on('destroy', () => proc.destroy())
