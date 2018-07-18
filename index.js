@@ -49,7 +49,7 @@ const formatTime = (secs) => {
   const min = Math.floor((secs - (hr * 3600)) / 60);
   const sec = Math.floor(secs - (hr * 3600) -  (min * 60));
   return `${min < 10 ? '0' + min : min}:${sec < 10 ? '0' + sec : sec}`;
-}
+};
 
 const view = (core, proc, win, audio) =>
   (state, actions) => h(Box, {}, [
@@ -124,7 +124,7 @@ OSjs.make('osjs/packages').register('MusicPlayer', (core, args, options, metadat
               {label: 'Open', onclick: () => actions.menuOpen()},
               {label: 'Quit', onclick: () => actions.menuQuit()}
             ]
-          })
+          });
         },
 
         menuOpen: () => () => basic.createOpenDialog(),
@@ -163,7 +163,7 @@ OSjs.make('osjs/packages').register('MusicPlayer', (core, args, options, metadat
       });
       basic.on('open-file', a.load);
       basic.init();
-    })
+    });
 
   return proc;
 });
