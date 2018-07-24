@@ -12,6 +12,6 @@
     "^audio\/(.*)"
   ],
   "files": [
-    "index.js"
+    "main.js"
   ]
 }
