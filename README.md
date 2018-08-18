@@ -13,6 +13,8 @@
 
 This is the Music Player Application for OS.js v3
 
+![Screenshot](https://raw.githubusercontent.com/os-js/osjs-musicplayer-application/master/screenshot.png)
+
 ## Installation
 
 ```bash
