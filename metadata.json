@@ -3,10 +3,12 @@
   "category": "multimedia",
   "icon": "icon.png",
   "title": {
-    "en_EN": "Music Player"
+    "en_EN": "Music Player",
+    "fr_FR": "Lecteur de musique"
   },
   "description": {
-    "en_EN": "Music Player"
+    "en_EN": "Music Player",
+    "fr_FR": "Lecteur de musique"
   },
   "mimes": [
     "^audio\/(.*)"
