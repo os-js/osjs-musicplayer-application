@@ -4,10 +4,12 @@
   "icon": "icon.png",
   "title": {
     "en_EN": "Music Player",
+    "nb_NO": "Musikkavspiller",
     "fr_FR": "Lecteur de musique"
   },
   "description": {
-    "en_EN": "Music Player",
+    "en_EN": "Play music files",
+    "nb_NO": "Spill av musikkfiler",
     "fr_FR": "Lecteur de musique"
   },
   "mimes": [
