@@ -154,6 +154,15 @@ OSjs.make('osjs/packages').register('MusicPlayer', (core, args, options, metadat
 
       audio.addEventListener('error', () => a.setPlaying(false));
 
+      win.on('drop', (ev, data) => {
+        if (data.isFile && data.mime) {
+          const found = metadata.mimes.find(m => (new RegExp(m)).test(data.mime));
+          if (found) {
+            basic.open(data);
+          }
+        }
+      });
+
       proc.on('destroy', () => basic.destroy());
       proc.on('destroy', () => {
         if (audio) {
