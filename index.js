@@ -51,7 +51,7 @@ const formatTime = (secs) => {
   return `${min < 10 ? '0' + min : min}:${sec < 10 ? '0' + sec : sec}`;
 };
 
-const formatMetadata = (metadata, pdefaultFormatted) => {
+const formatMetadata = (metadata, defaultFormatted) => {
   if (metadata && metadata.common) {
     const pick = ['artist', 'album', 'title']
       .map(key => metadata.common[key])
