@@ -51,6 +51,20 @@ const formatTime = (secs) => {
   return `${min < 10 ? '0' + min : min}:${sec < 10 ? '0' + sec : sec}`;
 };
 
+const formatMetadata = (metadata, pdefaultFormatted) => {
+  if (metadata && metadata.common) {
+    const pick = ['artist', 'album', 'title']
+      .map(key => metadata.common[key])
+      .filter(value => !!value);
+
+    if (pick.length > 1) {
+      return pick.join(' - ');
+    }
+  }
+
+  return defaultFormatted;
+};
+
 const view = (core, proc, win, audio) =>
   (state, actions) => h(Box, {}, [
     h(Menubar, {}, [
@@ -91,6 +105,8 @@ OSjs.make('osjs/packages').register('MusicPlayer', (core, args, options, metadat
     metadata
   });
 
+  const readMetadata = body => proc.request('/metadata', {method: 'get', body});
+
   proc.createWindow({
     id: 'MusicPlayerWindow',
     title: metadata.title.en_EN,
@@ -109,9 +125,11 @@ OSjs.make('osjs/packages').register('MusicPlayer', (core, args, options, metadat
       const a = app({
         playing: false,
         trackTitle: '(no track loaded)',
+        metadata: {},
         trackLength: 0,
         currentTime: 0
       }, {
+        setMetadata: metadata => state => ({metadata}),
         setPlaying: playing => state => ({playing}),
         setTrackLength: trackLength => state => ({trackLength}),
         setTrackTitle: trackTitle => state => ({trackTitle}),
@@ -138,8 +156,19 @@ OSjs.make('osjs/packages').register('MusicPlayer', (core, args, options, metadat
         },
 
         load: file => (state, actions) => {
+          a.setMetadata({});
+          a.setTrackTitle(file.filename);
+
           vfs.url(file)
-            .then(url => actions.play(url));
+            .then(url => {
+              actions.play(url);
+
+              readMetadata(file)
+                .then(({metadata}) => {
+                  a.setMetadata(metadata);
+                  a.setTrackTitle(formatMetadata(metadata, file.filename));
+                });
+            });
         }
       }, view(core, proc, win, audio), $content);
 
@@ -149,7 +178,6 @@ OSjs.make('osjs/packages').register('MusicPlayer', (core, args, options, metadat
       audio.addEventListener('timeupdate', (ev) => a.setCurrentTime(ev.target.currentTime));
       audio.addEventListener('loadeddata', (ev) => {
         a.setTrackLength(ev.target.duration);
-        a.setTrackTitle(proc.args.file.filename);
       });
 
       audio.addEventListener('error', () => a.setPlaying(false));

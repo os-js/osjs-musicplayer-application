@@ -2,6 +2,7 @@
   "name": "MusicPlayer",
   "category": "multimedia",
   "icon": "icon.png",
+  "server": "server.js",
   "title": {
     "en_EN": "Music Player",
     "nb_NO": "Musikkavspiller",
