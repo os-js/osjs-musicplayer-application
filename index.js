@@ -40,7 +40,7 @@ import {
   Menubar,
   MenubarItem,
   RangeField
-} from '@osjs/gui';
+} from '@osjs/gui/index.js';
 
 import {BasicApplication} from '@osjs/common';
 
