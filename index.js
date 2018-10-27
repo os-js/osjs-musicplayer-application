@@ -40,9 +40,7 @@ import {
   Menubar,
   MenubarItem,
   RangeField
-} from '@osjs/gui/index.js';
-
-import {BasicApplication} from '@osjs/common';
+} from '@osjs/gui';
 
 const formatTime = (secs) => {
   const hr  = Math.floor(secs / 3600);
@@ -118,7 +116,7 @@ OSjs.make('osjs/packages').register('MusicPlayer', (core, args, options, metadat
     .render(($content, win) => {
       const audio = document.createElement('audio');
 
-      const basic = new BasicApplication(core, proc, win, {
+      const basic = core.make('osjs/basic-application', proc, win, {
         defaultFilename: null
       });
 
