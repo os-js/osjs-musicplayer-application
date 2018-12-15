@@ -63,12 +63,14 @@ const formatMetadata = (metadata, defaultFormatted) => {
   return defaultFormatted;
 };
 
-const view = (core, proc, win, audio) =>
-  (state, actions) => h(Box, {}, [
+const view = (core, proc, win, audio) => {
+  const _ = core.make('osjs/locale').translate;
+
+  return (state, actions) => h(Box, {}, [
     h(Menubar, {}, [
       h(MenubarItem, {
         onclick: ev => actions.menu(ev)
-      }, 'File')
+      }, _('LBL_FILE'))
     ]),
     h(Box, {grow: 1, shrink: 1, align: 'center', justify: 'center', orientation: 'horizontal'}, [
       h(Box, {}, [
@@ -94,6 +96,7 @@ const view = (core, proc, win, audio) =>
       h(Button, {label: 'Next', disabled: true})
     ])
   ]);
+};
 
 OSjs.make('osjs/packages').register('MusicPlayer', (core, args, options, metadata) => {
   const vfs = core.make('osjs/vfs');
@@ -104,10 +107,12 @@ OSjs.make('osjs/packages').register('MusicPlayer', (core, args, options, metadat
   });
 
   const readMetadata = body => proc.request('/metadata', {method: 'get', body});
+  const title = core.make('osjs/locale')
+    .translatableFlat(metadata.title);
 
   proc.createWindow({
     id: 'MusicPlayerWindow',
-    title: metadata.title.en_EN,
+    title,
     icon: proc.resource(metadata.icon),
     dimension: {width: 400, height: 200}
   })
@@ -116,6 +121,7 @@ OSjs.make('osjs/packages').register('MusicPlayer', (core, args, options, metadat
     .render(($content, win) => {
       const audio = document.createElement('audio');
 
+      const _ = core.make('osjs/locale').translate;
       const basic = core.make('osjs/basic-application', proc, win, {
         defaultFilename: null
       });
@@ -137,8 +143,8 @@ OSjs.make('osjs/packages').register('MusicPlayer', (core, args, options, metadat
           core.make('osjs/contextmenu').show({
             position: ev.target,
             menu: [
-              {label: 'Open', onclick: () => actions.menuOpen()},
-              {label: 'Quit', onclick: () => actions.menuQuit()}
+              {label: _('LBL_OPEN'), onclick: () => actions.menuOpen()},
+              {label: _('LBL_QUIT'), onclick: () => actions.menuQuit()}
             ]
           });
         },
