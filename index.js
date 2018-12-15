@@ -65,6 +65,7 @@ const formatMetadata = (metadata, defaultFormatted) => {
 
 const view = (core, proc, win, audio) => {
   const _ = core.make('osjs/locale').translate;
+  const {icon} = core.make('osjs/theme');
 
   return (state, actions) => h(Box, {}, [
     h(Menubar, {}, [
@@ -88,12 +89,12 @@ const view = (core, proc, win, audio) => {
       onchange: (ev, val) => (audio.currentTime = val)
     }),
     h(Toolbar, {justify: 'center'}, [
-      h(Button, {label: 'Prev', disabled: true}),
-      h(Button, {label: 'Rew', disabled: true}),
-      h(Button, {label: 'Pause', disabled: !state.playing, onclick: () => audio.pause()}),
-      h(Button, {label: 'Play', disabled: state.playing, onclick: () => audio.play()}),
-      h(Button, {label: 'Fwd', disabled: true}),
-      h(Button, {label: 'Next', disabled: true})
+      h(Button, {icon: icon('go-previous'), title: 'Prev', disabled: true}),
+      h(Button, {icon: icon('media-seek-backward'), title: 'Rew', disabled: true}),
+      h(Button, {icon: icon('media-playback-pause'), title: 'Pause', disabled: !state.playing, onclick: () => audio.pause()}),
+      h(Button, {icon: icon('media-playback-start'), title: 'Play', disabled: state.playing, onclick: () => audio.play()}),
+      h(Button, {icon: icon('media-seek-forward'), title: 'Fwd', disabled: true}),
+      h(Button, {icon: icon('go-next'), title: 'Next', disabled: true})
     ])
   ]);
 };
