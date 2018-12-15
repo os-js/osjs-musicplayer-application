@@ -18,6 +18,6 @@ This is the Music Player Application for OS.js v3
 ## Installation
 
 ```bash
-npm install --save @osjs/musicplayer-application
+npm install --save --production @osjs/musicplayer-application
 npm run package:discover
 ```
