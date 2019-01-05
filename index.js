@@ -27,6 +27,8 @@
  * @author  Anders Evenrud <andersevenrud@gmail.com>
  * @licence Simplified BSD License
  */
+import osjs from 'osjs';
+import {name as applicationName} from './metadata.json';
 
 import {
   h,
@@ -99,7 +101,7 @@ const view = (core, proc, win, audio) => {
   ]);
 };
 
-OSjs.make('osjs/packages').register('MusicPlayer', (core, args, options, metadata) => {
+osjs.register(applicationName, (core, args, options, metadata) => {
   const vfs = core.make('osjs/vfs');
   const proc = core.make('osjs/application', {
     args,
