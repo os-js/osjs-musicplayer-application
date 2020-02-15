@@ -7,13 +7,15 @@
     "en_EN": "Music Player",
     "nb_NO": "Musikkavspiller",
     "fr_FR": "Lecteur de musique",
-    "de_DE": "Musikplayer"
+    "de_DE": "Musikplayer",
+    "pt_BR": "Music Player"
   },
   "description": {
     "en_EN": "Play music files",
     "nb_NO": "Spill av musikkfiler",
     "fr_FR": "Lecteur de musique",
-    "de_DE": "Musikplayer"
+    "de_DE": "Musikplayer",
+    "pt_BR": "Toque seus músicas"
   },
   "mimes": [
     "^audio\/(.*)"
