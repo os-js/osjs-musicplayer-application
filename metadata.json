@@ -15,7 +15,7 @@
     "nb_NO": "Spill av musikkfiler",
     "fr_FR": "Lecteur de musique",
     "de_DE": "Musikplayer",
-    "pt_BR": "Toque seus músicas"
+    "pt_BR": "Toque suas músicas"
   },
   "mimes": [
     "^audio\/(.*)"
