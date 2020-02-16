@@ -22,9 +22,9 @@
     "metadata.json"
   ],
   "dependencies": {
-    "@osjs/gui": "^4.0.20",
-    "music-metadata": "^3.5.0",
-    "hyperapp": "^1.2.9"
+    "@osjs/gui": "^4.0.30",
+    "hyperapp": "^1.2.9",
+    "music-metadata": "^3.5.0"
   },
   "author": "Anders Evenrud <andersevenrud@gmail.com>",
   "license": "BSD-2-Clause",
